@@ -1,6 +1,7 @@
 from flask import Flask, render_template, url_for
+from forms import RegistrationForm, LoginForm
 app = Flask(__name__)
-
+app.config['SECRET_KEY'] = 'be9f24f348942bc26cd365c2fc86b769'
 posts = [
     {
         'author': 'Niraj Chowdhary',

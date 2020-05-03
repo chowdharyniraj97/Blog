@@ -2,6 +2,7 @@ from BLog.models import User, Post
 from flask import  render_template, url_for, flash, redirect
 from BLog.forms import RegistrationForm, LoginForm
 from BLog import app,bcrypt,db
+from flask_login import login_user,current_user,logout_user 
 posts = [
     {
         'author': 'Niraj Chowdhary',
@@ -23,6 +24,8 @@ def home():
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
     form = RegistrationForm()
 
     if form.validate_on_submit():
@@ -38,19 +41,18 @@ def register():
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
     form = LoginForm()
     if form.validate_on_submit():
-        list=User.query.all()
-        cur_pass=""
-        for user in list:
-            if user.email==form.email.data:
-                cur_pass=user.password
-                break
-        if  bcrypt.check_password_hash(cur_pass,form.password.data):
-            flash('Welcome Niraj', 'success')
+       user=User.query.filter_by(email=form.email.data).first()
+       
+       if user and bcrypt.check_password_hash(user.password,form.password.data):
+            login_user(user,remember=form.remember.data)
+            flash(f'Welcome {user.username}', 'success')
             return redirect(url_for('home'))
-        else:
-            flash("login unsuccessful, please check username and password!", 'danger')
+       else:
+            flash("Login unsuccessful, please check username and password!", 'danger')
 
     return render_template('login.html', title='Login', form=form)
 
@@ -58,3 +60,8 @@ def login():
 @app.route("/about")
 def about():
     return "about"
+
+@app.route("/logout")
+def logout():
+    logout_user()
+    return redirect(url_for('home'))

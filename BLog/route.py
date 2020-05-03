@@ -1,7 +1,7 @@
-from flask import Flask, render_template, url_for, flash, redirect
-from forms import RegistrationForm, LoginForm
-app = Flask(__name__)
-app.config['SECRET_KEY'] = 'be9f24f348942bc26cd365c2fc86b769'
+from BLog.models import User, Post
+from flask import  render_template, url_for, flash, redirect
+from BLog.forms import RegistrationForm, LoginForm
+from BLog import app
 posts = [
     {
         'author': 'Niraj Chowdhary',

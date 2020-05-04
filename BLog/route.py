@@ -54,7 +54,7 @@ def login():
                 return redirect(url_for(next_page))
             else:
                 flash(f'Welcome {user.username}', 'success')
-                redirect(url_for("home"))
+                return redirect(url_for("home"))
        else:
             flash("Login unsuccessful, please check username and password!", 'danger')
 

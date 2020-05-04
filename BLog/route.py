@@ -1,6 +1,6 @@
 from BLog.models import User, Post
 from flask import  render_template, url_for, flash, redirect, request
-from BLog.forms import RegistrationForm, LoginForm
+from BLog.forms import RegistrationForm, LoginForm, UpdateForm
 from BLog import app,bcrypt,db
 from flask_login import login_user,current_user,logout_user,login_required
 posts = [
@@ -70,8 +70,15 @@ def logout():
     logout_user()
     return redirect(url_for('home'))
 
-@app.route("/account")
+@app.route("/account", methods=['GET', 'POST'])
 @login_required
 def account():
+    form=UpdateForm()
+    if form.validate_on_submit():
+       current_user.username=form.username.data
+       current_user.email=form.email.data  
+       db.session.commit()
+       flash('Your accout has been updated successfully','success')   
+       return redirect(url_for('account'))
     image_file=url_for('static',filename='profile_pic/'+current_user.image_file)
-    return render_template('account.html', title='Account',image_file=image_file)
+    return render_template('account.html', title='Account',image_file=image_file,form=form)

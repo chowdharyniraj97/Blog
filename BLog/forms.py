@@ -53,8 +53,8 @@ class UpdateForm(FlaskForm):
                 raise ValidationError("Username already taken")
         
     def validate_email(self,email):
-        if username.data!=current_user.username:
+        if email.data!=current_user.email:
             user=User.query.filter_by(email=email.data).first()
             if user:
-                raise ValidationError("Email already registered, please login")
+                raise ValidationError("Email already registered, user other one")
 

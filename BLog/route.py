@@ -70,7 +70,7 @@ def save_pic(form_pic):
     output_size=(125,125)
     i=Image.open(form_pic)
     i.thumbnail(output_size)
-    form_pic.save(i)
+    i.save(pict_path)
     return picture_fn
 
 @app.route("/about")

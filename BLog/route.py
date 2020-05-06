@@ -2,25 +2,14 @@ import os,secrets
 from PIL import Image
 from BLog.models import User, Post
 from flask import  render_template, url_for, flash, redirect, request
-from BLog.forms import RegistrationForm, LoginForm, UpdateForm
+from BLog.forms import RegistrationForm, LoginForm, UpdateForm,PostForm
 from BLog import app,bcrypt,db
 from flask_login import login_user,current_user,logout_user,login_required
-posts = [
-    {
-        'author': 'Niraj Chowdhary',
-        'title': 'Blog Post 1',
-        'content': 'First post content',
-        'date_posted': 'April 20, 2020'
-    },
-    {
-        'author': 'Nikhil Chowdhary',
-        'title': 'Blog Post 2',
-        'content': 'Second post content',
-        'date_posted': 'April 21, 2020'
-    }
-]
+
 @app.route("/")
+@app.route("/index")
 def home():
+    posts=Post.query.all()
     return render_template("home.html", posts=posts)
 
 
@@ -99,3 +88,17 @@ def account():
         return redirect(url_for('account'))
     image_file=url_for('static',filename='profile_pic/'+current_user.image_file)
     return render_template('account.html', title='Account',image_file=image_file,form=form)
+
+
+@app.route("/post/new",methods=['GET', 'POST'])
+@login_required
+def new_posts():
+    form=PostForm()
+    if form.validate_on_submit():
+        post=Post(title=form.title.data,content=form.content.data,author=current_user)
+        db.session.add(post)
+        db.session.commit()
+        flash('Your post has been created','success')
+        return redirect(url_for("home"))
+    return render_template('creat_post.html', title='New Post',form=form)
+

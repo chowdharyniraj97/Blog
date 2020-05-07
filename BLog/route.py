@@ -6,6 +6,8 @@ from BLog.forms import RegistrationForm, LoginForm, UpdateForm,PostForm
 from BLog import app,bcrypt,db
 from flask_login import login_user,current_user,logout_user,login_required
 
+
+
 @app.route("/")
 @app.route("/index")
 def home():

@@ -28,7 +28,10 @@ mail=Mail(app)
 from BLog.users.route import users
 from BLog.posts.route import posts
 from BLog.main.route import main
+from BLog.errors.handler import errors
+
 
 app.register_blueprint(users)
 app.register_blueprint(posts)
 app.register_blueprint(main)
+app.register_blueprint(errors)

@@ -20,7 +20,7 @@ def register():
         
         db.session.add(user)
         db.session.commit()
-        flash('Account created for You can login now', 'success')
+        flash(f"Account for'{form.username.data}' has been created.You can login now", 'success')
         return redirect(url_for('users.login'))
     return render_template('register.html', title='Register', form=form)
 
@@ -39,7 +39,7 @@ def login():
             if next_page:
                 return redirect(url_for(next_page))
             else:
-                #flash(f'Welcome {user.username}', 'success')
+                flash(f'Welcome {user.username}', 'success')
                 return redirect(url_for("main.home"))
        else:
             flash("Login unsuccessful, please check username and password!", 'danger')

@@ -2,8 +2,8 @@ version: '3'
 services:
   flask-sample:
     build: .
-    # depends_on:
-    #   - db
+    depends_on:
+      - db
     ports:
      - "5000:5000"
     environment:
@@ -12,10 +12,12 @@ services:
      - DBHOST=db
      - DBNAME=postgres
 
-  # db:
-  #   image: postgres:9.4
-  #   restart: always
-  #   environment:
-  #     POSTGRES_PASSWORD: changeme
-  #   volumes:
-  #   - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+  db:
+    image: postgres:9.4
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: changeme
+    ports:
+     - "5432:5432"
+    # volumes:
+    # - ./BLog/site.db:/docker-entrypoint-initdb.d/init.sql

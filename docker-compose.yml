@@ -11,13 +11,13 @@ services:
      - DBPASS=changeme
      - DBHOST=db
      - DBNAME=postgres
+    volumes:
+      - "/home/niraj/Desktop/test/Blog/:/projects/"
+    
 
   db:
     image: postgres:9.4
     restart: always
     environment:
       POSTGRES_PASSWORD: changeme
-    ports:
-     - "5432:5432"
-    # volumes:
-    # - ./BLog/site.db:/docker-entrypoint-initdb.d/init.sql
+

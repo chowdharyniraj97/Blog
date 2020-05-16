@@ -4,15 +4,20 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 from flask_mail import Mail
-from BLog import myEnvVal
+#from BLog import myEnvVal
 from flask_admin import Admin
-myEnvVal.setVar()
+#myEnvVal.setVar()
 
 
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'be9f24f348942bc26cd365c2fc86b769'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%s:%s@%s:5432/%s' % (
+#     # ARGS.dbuser, ARGS.dbpass, ARGS.dbhost, ARGS.dbname
+#     os.environ['DBUSER'], os.environ['DBPASS'], os.environ['DBHOST'], os.environ['DBNAME']
+# )
+app.config['SQLALCHEMY_DATABASE_URI']='sqlite:///site.db'
+
 db = SQLAlchemy(app)
 app.config['FLASK_ADMIN_SWATCH'] = 'cerulean'
 

@@ -40,7 +40,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%s:%s@%s:5432/%s' % (
 
 db = SQLAlchemy(app)
 app.config['FLASK_ADMIN_SWATCH'] = 'cerulean'
-db.create_all()
+
 admin = Admin(app, name='Express Daily', template_mode='bootstrap3')
 bcrypt=Bcrypt(app)
 loginmanager = LoginManager(app)

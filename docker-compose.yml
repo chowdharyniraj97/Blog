@@ -20,4 +20,3 @@ services:
     restart: always
     environment:
       POSTGRES_PASSWORD: changeme
-

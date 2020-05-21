@@ -4,8 +4,9 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 from flask_mail import Mail
-from BLog import myEnvVal
-myEnvVal.setVar()
+from flask_marshmallow import Marshmallow
+# from BLog import myEnvVal
+# myEnvVal.setVar()
 
 
 
@@ -13,6 +14,7 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'be9f24f348942bc26cd365c2fc86b769'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 db = SQLAlchemy(app)
+ma=Marshmallow(app)
 bcrypt=Bcrypt(app)
 loginmanager = LoginManager(app)
 loginmanager.login_view='login'

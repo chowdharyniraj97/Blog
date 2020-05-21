@@ -1,6 +1,7 @@
 import os,secrets
+from flask import jsonify,json
 from PIL import Image
-from BLog.models import User, Post
+from BLog.models import User, Post,PostSchema,UserSchema
 from flask import  render_template, url_for, flash, redirect, request,abort
 from BLog.forms import (RegistrationForm, LoginForm, UpdateForm,
                              PostForm, RequestResetForm, ResetPasswordForm)
@@ -10,12 +11,21 @@ from flask_mail import Message
 
 
 
+
 @app.route("/")
 @app.route("/index")
 def home():
     page=request.args.get('page',1,type=int)
     posts=Post.query.order_by(Post.date_posted.desc()).paginate(page=page,per_page=1)
-    return render_template("home.html", posts=posts)
+    post=Post.query.all()
+    all_post=[]
+    for cur in post:
+        post_dict=cur.__dict__
+        del post_dict['_sa_instance_state']
+        all_post.append(post_dict)
+    return jsonify(all_post)
+   
+    
 
 
 @app.route("/register", methods=['GET', 'POST'])

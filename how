@@ -1,0 +1,11 @@
+
+The code added for dokcer-compose goes as follows:
+first it starts the postgres container
+then it fires up the dockerfile of the app and call runs.py
+on executing run.py it first creates the database structure
+then run the flask server
+
+Also remember the first file that runs when you type run.py is the __init__.py because run imports app and db so interpretor goes there before entering run
+Now once it enters run it keeps looping there until database connection is established and once it is done it exits and returns back to the run and creates all the
+table and runs the server
+ 

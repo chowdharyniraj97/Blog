@@ -1,7 +1,8 @@
-from BLog import db,loginmanager,app
+from BLog import db,loginmanager,app,ma
 from datetime import datetime
 from flask_login import UserMixin
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+from marshmallow_sqlalchemy import ModelSchema
 @loginmanager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
@@ -43,3 +44,14 @@ class Post(db.Model):
 
     def __repr__(self):
         return f"Post('{self.title}', '{self.date_posted}')"
+
+class UserSchema(ma.SQLAlchemySchema):
+    class Meta:
+        model=User
+
+class PostSchema(ma.SQLAlchemySchema):
+    class Meta:
+        model=Post
+    
+
+

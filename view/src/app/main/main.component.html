@@ -3,42 +3,44 @@
 
 <head>
 
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="">
-  <meta name="author" content="">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-  <title>Blog Home - Start Bootstrap Template</title>
+    <title>Blog Home - Start Bootstrap Template</title>
 
-  <!-- Bootstrap core CSS -->
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-  <!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script> -->
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script> -->
 
-  <!--  -->
+    <!--  -->
 
 </head>
 
 <body>
+   
+    <div *ngIf="posts">
 
-        <div *ngIf="posts">
-            
-                <article *ngFor="let post of posts" class="media content-section">
-                    <!-- <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pic/' + post.author.image_file) }}"> -->
-                    <div class="media-body">
-                      <div class="article-metadata">
-                        
-                        
-                        <small class="text-muted">{{ post.date_posted }}</small>
-                      </div>
-                      <h2><a class="article-title" >{{ post.title }}</a></h2>
-                      <p class="article-content">{{ post.content }}</p>
-                    </div>
-                  </article>
-            
-            
-        </div>
+        <article *ngFor="let post of posts" class="media content-section">
+            <!-- <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pic/' + post.author.image_file) }}"> -->
+            <div class="media-body" id="block">
+                <div class="article-metadata">
+
+
+                    <small class="text-muted">{{ post.date_posted }}</small>
+                </div>
+                <h2><a class="article-title">{{ post.title }}</a></h2>
+                <p id="cont" class="article-content">{{ post.content }}</p>
+            </div>
+        </article>
         
-         
-    </body>
-</html>
 
+
+    </div>
+
+
+</body>
+
+</html>

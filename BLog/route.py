@@ -30,18 +30,28 @@ def home():
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
+
+    if request.method=='POST':
+        data=request.get_json()
+        hashed_pw=bcrypt.generate_password_hash(data['password']).decode('utf-8')
+        user=User(username=data['username'],email=data['email'],password=hashed_pw)
+        db.session.add(user)
+        db.session.commit()
+        print('user added')
+        # print(request)
+        return jsonify({"message":"data added"}),201
+
     if current_user.is_authenticated:
         return redirect(url_for('home'))
     form = RegistrationForm()
 
-    if form.validate_on_submit():
-        hashed_pw=bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-        user=User(username=form.username.data,email=form.email.data,password=hashed_pw)
+    # if form.validate_on_submit():
+    #     hashed_pw=bcrypt.generate_password_hash(form.password.data).decode('utf-8')
         
-        db.session.add(user)
-        db.session.commit()
-        flash(f'Account created for {form.username.data}! You can login now', 'success')
-        return redirect(url_for('login'))
+        
+        
+    #     flash(f'Account created for {form.username.data}! You can login now', 'success')
+    #     return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
 
 

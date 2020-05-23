@@ -1,7 +1,7 @@
 <div class="contianer Fluid">
 <h1>Registration</h1>
 
-<form #userForm="ngForm" novalidate (ngSubmit)="onSubmit()">
+<form #userForm="ngForm" *ngIf=!submitted novalidate (ngSubmit)="onSubmit()">
 
     <div class="form-group" >
         <label >Username</label>

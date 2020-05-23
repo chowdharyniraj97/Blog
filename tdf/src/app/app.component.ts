@@ -10,13 +10,14 @@ import {RegistrationService} from './registration.service'
 })
 export class AppComponent {
   title = 'tdf';
+  submitted=false;
   constructor(private registeri:RegistrationService){}
 
    usr=new User("","","","");
 
 
    onSubmit(){
-
+    this.submitted=true;
      this.registeri.register(this.usr)
             .subscribe((data)=>{console.log("success",data)
           

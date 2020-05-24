@@ -7,7 +7,7 @@
         <label >Username</label>
     <input type="text"[class.is-invalid]="name.invalid && name.touched" minlength=5
                     required #name="ngModel" class="form-control" name="username" [(ngModel)]="usr.username">
-        <!-- <small class="text-danger" [class.d-none]="name.valid || name.untouched">username is required</small> -->
+        <!-- <small  [class.d-none]="name.valid || name.untouched">username is required</small> -->
     <div *ngIf="name.errors && (name.invalid || name.touched )">
         <!-- <small class="text-danger" [class.d-none]="name.errors?.minlength && name.touched">username should be atleast 5 characters</small> -->
         <small class="text-danger" [class.d-none]="name.valid || name.untouched">username is required</small>

@@ -6,6 +6,7 @@ from flask_login import LoginManager
 from flask_mail import Mail
 from flask_marshmallow import Marshmallow
 from flask_cors import CORS
+from flask_jwt_extended import (JWTManager,create_access_token)
 # from BLog import myEnvVal
 # myEnvVal.setVar()
 
@@ -18,6 +19,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 db = SQLAlchemy(app)
 ma=Marshmallow(app)
 bcrypt=Bcrypt(app)
+jwt=JWTManager(app)
 loginmanager = LoginManager(app)
 loginmanager.login_view='login'
 loginmanager.login_message_category='info'

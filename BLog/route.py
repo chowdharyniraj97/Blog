@@ -5,9 +5,10 @@ from BLog.models import User, Post,PostSchema,UserSchema
 from flask import  render_template, url_for, flash, redirect, request,abort
 from BLog.forms import (RegistrationForm, LoginForm, UpdateForm,
                              PostForm, RequestResetForm, ResetPasswordForm)
-from BLog import app,bcrypt,db,mail
+from BLog import app,bcrypt,db,mail,jwt
 from flask_login import login_user,current_user,logout_user,login_required
 from flask_mail import Message
+from flask_jwt_extended import (create_access_token)
 
 
 
@@ -37,100 +38,77 @@ def register():
         user=User(username=data['username'],email=data['email'],password=hashed_pw)
         db.session.add(user)
         db.session.commit()
-        print('user added')
+        # print('user added')
         # print(request)
-        return jsonify({"message":"data added"}),201
+        result={'email':user.email+" registered"}
+        return jsonify({"result":result}),201
 
-    if current_user.is_authenticated:
-        return redirect(url_for('home'))
-    form = RegistrationForm()
+    # if current_user.is_authenticated:
+    #     return redirect(url_for('home'))
+    # form = RegistrationForm()
 
-    # if form.validate_on_submit():
-    #     hashed_pw=bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+    # # if form.validate_on_submit():
+    # #     hashed_pw=bcrypt.generate_password_hash(form.password.data).decode('utf-8')
         
         
         
-    #     flash(f'Account created for {form.username.data}! You can login now', 'success')
-    #     return redirect(url_for('login'))
-    return render_template('register.html', title='Register', form=form)
+    # #     flash(f'Account created for {form.username.data}! You can login now', 'success')
+    # #     return redirect(url_for('login'))
+    # return render_template('register.html', title='Register', form=form)
 
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
+    print(current_user)
     if current_user.is_authenticated:
         return redirect(url_for('home'))
-    form = LoginForm()
-    if form.validate_on_submit():
-       user=User.query.filter_by(email=form.email.data).first()
-       
-       if user and bcrypt.check_password_hash(user.password,form.password.data):
-            login_user(user,remember=form.remember.data)
-            next_page=request.args.get('next')
-            if next_page:
-                return redirect(url_for(next_page))
-            else:
-                flash(f'Welcome {user.username}', 'success')
-                return redirect(url_for("home"))
-       else:
-            flash("Login unsuccessful, please check username and password!", 'danger')
+    form=LoginForm()
+    print("hello")
+    if request.method =='POST':
+        data=request.get_json()
+        # print(data)
+        user=User.query.filter_by(email=data['email']).first()
+        print(user)
+        password=data['password']
+        print(user.password)
+        print(data)
+        print(bcrypt.check_password_hash(user.password,password))
+        if user and bcrypt.check_password_hash(user.password,password):
+            access_token=create_access_token(identity={
+                'username':user.username,
+                'email':user.email
+            })
+            # print(access_token)
+            result=jsonify({'token':access_token})
+        
+        else:
+            result =jsonify({'error':'invalid username password'}),405
 
-    return render_template('login.html', title='Login', form=form)
-
-def save_pic(form_pic):
-    random_hex=secrets.token_hex(8)
-    _,f_ext=os.path.splitext(form_pic.filename)
-    picture_fn=random_hex+f_ext
-    pict_path=os.path.join(app.root_path,'static/profile_pic',picture_fn)
-    output_size=(125,125)
-    i=Image.open(form_pic)
-    i.thumbnail(output_size)
-    i.save(pict_path)
-    return picture_fn
-
-@app.route("/about")
-def about():
-    return "about"
-
-@app.route("/logout")
-def logout():
-    logout_user()
-    return redirect(url_for('home'))
-
-@app.route("/account", methods=['GET', 'POST'])
-@login_required
-def account():
-    form=UpdateForm()
-    if form.validate_on_submit():
-        if form.picture.data:
-            picture_file=save_pic(form.picture.data)
-            current_user.image_file=picture_file
-
-
-        current_user.username=form.username.data
-        current_user.email=form.email.data  
-        db.session.commit()
-        flash('Your accout has been updated successfully','success')   
-        return redirect(url_for('account'))
-    image_file=url_for('static',filename='profile_pic/'+current_user.image_file)
-    return render_template('account.html', title='Account',image_file=image_file,form=form)
-
+    else:
+        return render_template('login.html', title='Login',form=form)
+    return result
 
 @app.route("/post/new",methods=['GET', 'POST'])
-@login_required
 def new_posts():
-    form=PostForm()
-    if form.validate_on_submit():
-        post=Post(title=form.title.data,content=form.content.data,author=current_user)
-        db.session.add(post)
-        db.session.commit()
-        flash('Your post has been created','success')
-        return redirect(url_for("home"))
-    return render_template('creat_post.html', title='New Post',form=form,legend="New Post")
+    data=request.get_json()
+    print(data)
+    user=User.query.filter_by(email=data['email']).first()    
+    post=Post(title=data['title'],content=data['content'],author=user)
+    db.session.add(post)
+    db.session.commit()
+    return jsonify({'message':'Post added'})
 
 @app.route("/post/<int:post_id>")
 def post(post_id):
+
     post=Post.query.get_or_404(post_id)
-    return render_template('post.html',title=post.title,post=post)
+    post_dict=post.__dict__
+    del post_dict['_sa_instance_state']
+    print(post_dict)
+    return jsonify({'message': post_dict})
+
+
+    
 
 @app.route("/post/<int:post_id>/update",methods=['GET', 'POST'])
 @login_required
@@ -172,43 +150,4 @@ def user_posts(username):
     return render_template("user_posts.html", posts=posts,user=user)
 
 
-def send_email(user):
-    token=user.get_reset_token()
-    print(user.email)
-    msg=Message('Password Reset Request',sender='noreply@expressdaily.com',recipients=[user.email])
-    msg.body=f'''To Reset your password visit the following link:
-{url_for('reset_token',token=token,_external=True)}
-If you did not make ignore!!
-'''
-    mail.send(msg)
 
-@app.route("/reset_password",methods=['POST','GET'])
-def reset_request():
-    if current_user.is_authenticated:
-        return redirect(url_for('home'))
-    
-    form=RequestResetForm()
-
-    if form.validate_on_submit():
-        user=User.query.filter_by(email=form.email.data).first()
-        send_email(user)
-        flash("an Email has been sent to your mailbox",'info')
-        return redirect(url_for('login'))
-    return render_template("reset_request.html",title="Reset Password",form=form)
-
-@app.route("/reset_password/<token>", methods=['GET', 'POST'])
-def reset_token(token):
-    if current_user.is_authenticated:
-        return redirect(url_for('home'))
-    user = User.verify_reset_token(token)
-    if user is None:
-        flash('That is an invalid or expired token', 'warning')
-        return redirect(url_for('reset_request'))
-    form = ResetPasswordForm()
-    if form.validate_on_submit():
-        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-        user.password = hashed_password
-        db.session.commit()
-        flash('Your password has been updated! You are now able to log in', 'success')
-        return redirect(url_for('login'))
-    return render_template('reset_token.html', title='Reset Password', form=form)

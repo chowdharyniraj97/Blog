@@ -7,8 +7,10 @@ from flask_mail import Mail
 #from BLog import myEnvVal
 from flask_admin import Admin
 #myEnvVal.setVar()
+from flask_cors import CORS
 from sqlalchemy import create_engine
 from sqlalchemy import exc
+from flask_jwt_extended import (JWTManager,create_access_token)
 import time
 
 
@@ -30,6 +32,7 @@ print('Connected!')
 
 
 app = Flask(__name__)
+
 app.config['SECRET_KEY'] = 'be9f24f348942bc26cd365c2fc86b769'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%s:%s@%s:5432/%s' % (
     # ARGS.dbuser, ARGS.dbpass, ARGS.dbhost, ARGS.dbname
@@ -40,9 +43,10 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%s:%s@%s:5432/%s' % (
 
 db = SQLAlchemy(app)
 app.config['FLASK_ADMIN_SWATCH'] = 'cerulean'
-
+cors = CORS(app)
 admin = Admin(app, name='Express Daily', template_mode='bootstrap3')
 bcrypt=Bcrypt(app)
+jwt=JWTManager(app)
 loginmanager = LoginManager(app)
 loginmanager.login_view='users.login'
 loginmanager.login_message_category='info'

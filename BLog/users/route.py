@@ -1,6 +1,8 @@
 from flask import render_template, url_for, flash, redirect, request, Blueprint
 from flask_login import login_user, current_user, logout_user, login_required
-from BLog import db, bcrypt
+from BLog import db, bcrypt,jwt
+from flask import jsonify,json
+from flask_jwt_extended import (create_access_token)
 from BLog.models import User, Post
 from BLog.users.forms import (RegistrationForm, LoginForm, UpdateForm,
                                    RequestResetForm, ResetPasswordForm)
@@ -10,42 +12,47 @@ users=Blueprint('users',__name__)
 
 @users.route("/register", methods=['GET', 'POST'])
 def register():
-    if current_user.is_authenticated:
-        return redirect(url_for('main.home'))
-    form = RegistrationForm()
-
-    if form.validate_on_submit():
-        hashed_pw=bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-        user=User(username=form.username.data,email=form.email.data,password=hashed_pw)
-        
+    if request.method=='POST':
+        data=request.get_json()
+        hashed_pw=bcrypt.generate_password_hash(data['password']).decode('utf-8')
+        user=User(username=data['username'],email=data['email'],password=hashed_pw)
         db.session.add(user)
         db.session.commit()
-        flash(f"Account for'{form.username.data}' has been created.You can login now", 'success')
-        return redirect(url_for('users.login'))
-    return render_template('register.html', title='Register', form=form)
-
+        # print('user added')
+        # print(request)
+        result={'email':user.email+" registered"}
+        return jsonify({"result":result}),201
 
 @users.route("/login", methods=['GET', 'POST'])
 def login():
+    print(current_user)
     if current_user.is_authenticated:
-        return redirect(url_for('main.home'))
-    form = LoginForm()
-    if form.validate_on_submit():
-       user=User.query.filter_by(email=form.email.data).first()
-       
-       if user and bcrypt.check_password_hash(user.password,form.password.data):
-            login_user(user,remember=form.remember.data)
-            next_page=request.args.get('next')
-            if next_page:
-                return redirect(url_for(next_page))
-            else:
-                flash(f'Welcome {user.username}', 'success')
-                return redirect(url_for("main.home"))
-       else:
-            flash("Login unsuccessful, please check username and password!", 'danger')
+        return redirect(url_for('home'))
+    form=LoginForm()
+    print("hello")
+    if request.method =='POST':
+        data=request.get_json()
+        # print(data)
+        user=User.query.filter_by(email=data['email']).first()
+        print(user)
+        password=data['password']
+        print(user.password)
+        print(data)
+        print(bcrypt.check_password_hash(user.password,password))
+        if user and bcrypt.check_password_hash(user.password,password):
+            access_token=create_access_token(identity={
+                'username':user.username,
+                'email':user.email
+            })
+            # print(access_token)
+            result=jsonify({'token':access_token})
+        
+        else:
+            result =jsonify({'error':'invalid username password'}),405
 
-    return render_template('login.html', title='Login', form=form)
-
+    else:
+        return render_template('login.html', title='Login',form=form)
+    return result
 
 @users.route("/logout")
 def logout():

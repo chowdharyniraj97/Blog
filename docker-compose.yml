@@ -20,3 +20,10 @@ services:
     restart: always
     environment:
       POSTGRES_PASSWORD: changeme
+
+  frontend:
+    build:
+      context: /home/niraj/Desktop/arjuncodes/login+regis/client/
+      dockerfile: Dockerfile
+    ports:
+      - '4201:4200'

@@ -26,4 +26,4 @@ services:
       context: /home/niraj/Desktop/arjuncodes/login+regis/client/
       dockerfile: Dockerfile
     ports:
-      - '4201:4200'
+      - '4200:4200'

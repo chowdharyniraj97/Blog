@@ -5,6 +5,9 @@ from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 from flask_mail import Mail
 from BLog import myEnvVal
+from celery import Celery
+from flask_cors import CORS, cross_origin
+
 myEnvVal.setVar()
 
 
@@ -13,6 +16,8 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'be9f24f348942bc26cd365c2fc86b769'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 db = SQLAlchemy(app)
+cors = CORS(app)
+celery=Celery(app.import_name,broker='redis://localhost:6379/0')
 bcrypt=Bcrypt(app)
 loginmanager = LoginManager(app)
 loginmanager.login_view='users.login'
@@ -20,8 +25,8 @@ loginmanager.login_message_category='info'
 app.config['MAIL_SERVER']= 'smtp.googlemail.com'
 app.config['MAIL_PORT']=587
 app.config['MAIL_USE_TLS']=True
-app.config['MAIL_USERNAME'] = os.environ.get('EMAIL_USER')
-app.config['MAIL_PASSWORD'] = os.environ.get('EMAIL_PASS')
+app.config['MAIL_USERNAME'] = os.environ.get('EMAIL')
+app.config['MAIL_PASSWORD'] = os.environ.get('Password')
 mail=Mail(app)
 
 

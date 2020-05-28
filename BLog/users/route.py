@@ -1,6 +1,8 @@
 from flask import render_template, url_for, flash, redirect, request, Blueprint
 from flask_login import login_user, current_user, logout_user, login_required
-from BLog import db, bcrypt
+from BLog import db, bcrypt,celery
+import json
+from flask import jsonify,json
 from BLog.models import User, Post
 from BLog.users.forms import (RegistrationForm, LoginForm, UpdateForm,
                                    RequestResetForm, ResetPasswordForm)
@@ -79,17 +81,13 @@ def user_posts(username):
 
 @users.route("/reset_password",methods=['POST','GET'])
 def reset_request():
-    if current_user.is_authenticated:
-        return redirect(url_for('main.home'))
-    
-    form=RequestResetForm()
+    data=request.get_json()
+    print(data)
+    reset.delay(data['email'])
+    return jsonify({'message':'email sent'})
 
-    if form.validate_on_submit():
-        user=User.query.filter_by(email=form.email.data).first()
-        send_email(user)
-        flash("an Email has been sent to your mailbox",'info')
-        return redirect(url_for('users.login'))
-    return render_template("reset_request.html",title="Reset Password",form=form)
+
+
 
 @users.route("/reset_password/<token>", methods=['GET', 'POST'])
 def reset_token(token):
@@ -107,3 +105,8 @@ def reset_token(token):
         flash('Your password has been updated! You are now able to log in', 'success')
         return redirect(url_for('users.login'))
     return render_template('reset_token.html', title='Reset Password', form=form)
+
+@celery.task
+def reset(email):
+    user = User.query.filter_by(email=email).first()
+    send_email(user)

@@ -3,17 +3,19 @@ import secrets
 from PIL import Image
 from flask import url_for, current_app
 from flask_mail import Message
-from BLog import mail
+from BLog import mail,app
 
 def send_email(user):
-    token=user.get_reset_token()
+    print(user)
     print(user.email)
-    msg=Message('Password Reset Request',sender='noreply@expressdaily.com',recipients=[user.email])
-    msg.body=f'''To Reset your password visit the following link:
-{url_for('reset_token',token=token,_external=True)}
-If you did not make ignore!!
-'''
-    mail.send(msg)
+    with app.test_request_context():
+
+        msg=Message('Password Reset Request',sender='noreply@expressdaily.com',recipients=[user.email])
+        msg.body=f'''To Reset your password visit the following link:
+    xyz.com
+    If you did not make ignore!!
+    '''
+        mail.send(msg)
 
 def save_pic(form_pic):
     random_hex=secrets.token_hex(8)

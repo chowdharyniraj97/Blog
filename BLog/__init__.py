@@ -4,15 +4,17 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 from flask_mail import Mail
-#from BLog import myEnvVal
+from BLog import myEnvVal
 from flask_admin import Admin
 #myEnvVal.setVar()
 from flask_cors import CORS
 from sqlalchemy import create_engine
 from sqlalchemy import exc
+from celery import Celery
 from flask_jwt_extended import (JWTManager,create_access_token)
 import time
 
+myEnvVal.setVar()
 
 while 1:
     try:
@@ -44,6 +46,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%s:%s@%s:5432/%s' % (
 db = SQLAlchemy(app)
 app.config['FLASK_ADMIN_SWATCH'] = 'cerulean'
 cors = CORS(app)
+celery=Celery(app.import_name,broker='redis://redis:6379/0')
 admin = Admin(app, name='Express Daily', template_mode='bootstrap3')
 bcrypt=Bcrypt(app)
 jwt=JWTManager(app)
@@ -53,8 +56,8 @@ loginmanager.login_message_category='info'
 app.config['MAIL_SERVER']= 'smtp.googlemail.com'
 app.config['MAIL_PORT']=587
 app.config['MAIL_USE_TLS']=True
-app.config['MAIL_USERNAME'] = os.environ.get('EMAIL_USER')
-app.config['MAIL_PASSWORD'] = os.environ.get('EMAIL_PASS')
+app.config['MAIL_USERNAME'] = os.environ.get('EMAIL')
+app.config['MAIL_PASSWORD'] = os.environ.get('Password')
 mail=Mail(app)
 
 

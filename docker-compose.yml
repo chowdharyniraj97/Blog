@@ -14,7 +14,6 @@ services:
         - redis
     depends_on:
       - db
-      - flask-sample
     environment:
      - DBUSER=postgres
      - DBPASS=changeme
@@ -38,7 +37,7 @@ services:
      - DBHOST=db
      - DBNAME=postgres
     volumes:
-      - "/home/niraj/Desktop/test/Blog/:/projects/"
+      - ".:/projects/"
     
 
   db:

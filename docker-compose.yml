@@ -20,6 +20,8 @@ services:
     restart: always
     environment:
       POSTGRES_PASSWORD: changeme
+    ports:
+     - "5432:5432"
 
   frontend:
     build:

@@ -5,6 +5,24 @@ services:
     command: redis-server 
     ports:
      - "6379:6379"
+  
+  celery:
+    build: .
+    command: "celery -A BLog.users.route worker --loglevel=info"
+    user: nobody
+    links:
+        - redis
+    depends_on:
+      - db
+      - flask-sample
+    environment:
+     - DBUSER=postgres
+     - DBPASS=changeme
+     - DBHOST=db
+     - DBNAME=postgres
+    
+    volumes:
+        - .:/projects
 
   flask-sample:
     build: .
@@ -13,6 +31,7 @@ services:
       - redis
     ports:
      - "5000:5000"
+    command: "python3 run.py"
     environment:
      - DBUSER=postgres
      - DBPASS=changeme
@@ -36,3 +55,31 @@ services:
       dockerfile: Dockerfile
     ports:
       - '4200:4200'
+
+  
+  # Above there are four services
+  # -Redis
+  # -Celery
+  # -Flask
+  # -Postgres
+
+  # REDIS this is nothing but taking an image from dockerhub and rendering it to the port 6379 and this happens in the home directory as i am downloading image from the
+  # official dockerhub. Also as Nick suggested in order to communciate between containers use service names instead of local host. Initially,
+  #  I was instantiating celery=Celery(app.import_name,broker='redis://localhost:6379/0') int the flask app so celery was unable to find redis so when I changed to
+  # celery=Celery(app.import_name,broker='redis://redis:6379/0') replaced localhost with service name it executed properly as it used contianers service name to 
+  # communicate
+  
+
+  # Flask: Here first I built a docker file and using docker compose built its image which instaled python and all the requirements, copied code to the /projects directory
+  # and assigned it a port 5000 and run using command python3 run.py. Had to give env as that is needed by the code to connect to postgres.
+  
+  # Postgres: same as redis used the images to start a contianer and published it to default postgres port
+
+  # Celery: this is indeed a tricky stuff, took a while to start this container so i am going to explain in detail what exactly happens. So to this i gave the same docker
+  # file as the flask [because it requires the code in order to execute the command]. So it did the same steps as flask to build the image and the trick here was to 
+  # give env variables   as well because i shipped the same code as flask and it fetches env variables in __init__ file so if you do not provide it will 
+  # keep throwing an error as DBUSER not found as in init there is os.environ.get("DBUSER") and once I provided this it executed correctly
+  # Now there are some imp depends on
+  
+
+

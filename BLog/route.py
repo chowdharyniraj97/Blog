@@ -13,7 +13,7 @@ from flask_jwt_extended import (create_access_token)
 
 
 
-@app.route("/")
+@app.route("/api")
 @app.route("/index")
 def home():
     page=request.args.get('page',1,type=int)

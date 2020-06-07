@@ -1,14 +1,12 @@
-from flask import Blueprint, request, url_for, flash, render_template, abort, redirect
-from flask_login import current_user, login_required
-from flask import jsonify, json
-from flask_jwt_extended import (create_access_token)
+from flask import Blueprint, request
+from flask import jsonify
 from BLog import db
 from BLog.models import Post, User
-from BLog.posts.forms import PostForm
 
 posts = Blueprint("posts", __name__)
 
 
+# single post route
 @posts.route('/post/<int:postid>', methods=['GET', 'POST'])
 def one_posts(postid):
     post = Post.query.filter_by(id=postid).first();
@@ -23,6 +21,7 @@ def one_posts(postid):
     return jsonify({'post': res})
 
 
+# adding new post
 @posts.route("/post/new", methods=['GET', 'POST'])
 def new_posts():
     data = request.get_json()
@@ -34,6 +33,7 @@ def new_posts():
     return jsonify({'message': 'Post added'})
 
 
+# updating post route
 @posts.route("/post/<int:post_id>/update", methods=['GET', 'POST'])
 def update_post(post_id):
     post = Post.query.get_or_404(post_id)
@@ -44,10 +44,10 @@ def update_post(post_id):
     return jsonify({'message': 'successs'})
 
 
+# deleting post route
 @posts.route("/post/<int:post_id>/delete", methods=['POST'])
 def delete_post(post_id):
     post = Post.query.get_or_404(post_id)
     db.session.delete(post)
     db.session.commit()
-
-    return jsonify({'message':'post deleted'})
+    return jsonify({'message': 'post deleted'})

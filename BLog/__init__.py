@@ -6,7 +6,6 @@ from flask_login import LoginManager
 from flask_mail import Mail
 from BLog import myEnvVal
 from flask_admin import Admin
-#myEnvVal.setVar()
 from flask_cors import CORS
 from sqlalchemy import create_engine
 from sqlalchemy import exc
@@ -40,7 +39,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%s:%s@%s:5432/%s' % (
     # ARGS.dbuser, ARGS.dbpass, ARGS.dbhost, ARGS.dbname
     os.environ['DBUSER'], os.environ['DBPASS'], os.environ['DBHOST'], os.environ['DBNAME']
 )
-# app.config['SQLALCHEMY_DATABASE_URI']='sqlite:///site.db'
+
 
 
 db = SQLAlchemy(app)

@@ -15,7 +15,7 @@ def home():
         post_dict=cur.__dict__
         del post_dict['_sa_instance_state']
         all_post.append(post_dict)
-    return jsonify(all_post)
+    return jsonify(all_post),200
    
 
 

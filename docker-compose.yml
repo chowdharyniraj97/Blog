@@ -98,6 +98,4 @@ services:
   # give env variables   as well because i shipped the same code as flask and it fetches env variables in __init__ file so if you do not provide it will 
   # keep throwing an error as DBUSER not found as in init there is os.environ.get("DBUSER") and once I provided this it executed correctly
   # Now there are some imp depends on since it connects to db thus it depends on databse service and to communicate with redis it used links and puts redis under it
-  
-
 

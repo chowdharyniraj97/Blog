@@ -16,3 +16,6 @@ def home():
         all_post.append(post_dict)
     return jsonify(all_post), 200
 
+@main.route("/about")
+def about():
+    pass

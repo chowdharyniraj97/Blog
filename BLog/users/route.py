@@ -45,10 +45,18 @@ def login():
 @users.route("/reset_password", methods=['POST', 'GET'])
 def reset_request():
     data = request.get_json()
-    print(data)
     reset.delay(data['email'])
     return jsonify({'message': 'email sent'})
 
+@users.route("/change_password",methods=['POST'])
+def change_pass():
+    data = request.get_json()
+    print(data)
+    user = User.query.filter_by(email=data['email']).first()
+    hashed_pw = bcrypt.generate_password_hash(data['password']).decode('utf-8')
+    user.password=hashed_pw
+    db.session.commit()
+    return jsonify({'message':'success'})
 
 
 

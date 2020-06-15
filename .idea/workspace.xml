@@ -40,9 +40,8 @@
   <component name="ChangeListManager">
     <list default="true" id="77617c76-df1c-4b62-994b-2774324b7d48" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BLog/main/route.py" beforeDir="false" afterPath="$PROJECT_DIR$/BLog/main/route.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BLog/users/route.py" beforeDir="false" afterPath="$PROJECT_DIR$/BLog/users/route.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BLog/users/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/BLog/users/utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/run.py" beforeDir="false" afterPath="$PROJECT_DIR$/run.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -61,7 +60,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../going-to-school-web" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
@@ -108,7 +107,11 @@
       <workItem from="1591569507648" duration="2774000" />
       <workItem from="1591625472809" duration="28000" />
       <workItem from="1591707078856" duration="691000" />
-      <workItem from="1591856954366" duration="500000" />
+      <workItem from="1591856954366" duration="960000" />
+      <workItem from="1591905626005" duration="21000" />
+      <workItem from="1591909065637" duration="907000" />
+      <workItem from="1592086064237" duration="22000" />
+      <workItem from="1592087474463" duration="14000" />
     </task>
     <servers />
   </component>
@@ -159,10 +162,11 @@
       <screen x="0" y="335" width="1920" height="745" />
     </state>
     <state x="100" y="100" width="1720" height="880" key="DiffContextDialog/1920.312.1366.768/0.335.1920.745@0.335.1920.745" timestamp="1590618346698" />
-    <state x="783" y="355" key="FileChooserDialogImpl" timestamp="1591707768714">
-      <screen x="0" y="335" width="1920" height="745" />
+    <state x="2477" y="335" key="FileChooserDialogImpl" timestamp="1592087485932">
+      <screen x="1920" y="312" width="1366" height="768" />
     </state>
     <state x="783" y="355" key="FileChooserDialogImpl/1920.312.1366.768/0.335.1920.745@0.335.1920.745" timestamp="1591707768714" />
+    <state x="2477" y="335" key="FileChooserDialogImpl/1920.312.1366.768/0.335.1920.745@1920.312.1366.768" timestamp="1592087485932" />
     <state x="706" y="246" width="505" height="399" key="search.everywhere.popup" timestamp="1591563046893">
       <screen x="0" y="335" width="1920" height="745" />
     </state>

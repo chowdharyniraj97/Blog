@@ -2,4 +2,4 @@ from BLog import app
 from BLog import db
 if __name__ == '__main__':
     db.create_all()
-    app.run(host='0.0.0.0')
+    app.run(debug=True,host='0.0.0.0')

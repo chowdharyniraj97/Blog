@@ -6,8 +6,7 @@ from flask_mail import Message
 from BLog import mail,app
 
 def send_email(user,email):
-    
-    with app.test_request_context():
+    with app.app_context():
 
         msg=Message('Password Reset Request',sender='noreply@expressdaily.com',recipients=[email])
         msg.body=f'''To Reset your password visit the following link:

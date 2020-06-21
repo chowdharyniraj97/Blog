@@ -30,7 +30,7 @@ const routes: Routes = [
   {path: 'post/:id', component: OnepostComponent, canActivate: [AuthGuardService]},
   {path: 'reset_password', component: ResetPasswordComponent},
   {path:'post/:id/update', component: UpdateComponent},
-  {path:'change_password/:email',component: ChangepasswordComponent}
+  {path:'change_password/:token',component: ChangepasswordComponent}
 ];
 @NgModule({
   declarations: [

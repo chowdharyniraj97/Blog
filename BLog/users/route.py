@@ -48,11 +48,15 @@ def reset_request():
     reset.delay(data['email'])
     return jsonify({'message': 'email sent'})
 
-@users.route("/change_password",methods=['POST'])
-def change_pass():
+@users.route("/change_password/<token>",methods=['POST'])
+def change_pass(token):
+    print(token)
     data = request.get_json()
-    print(data)
-    user = User.query.filter_by(email=data['email']).first()
+    user=User.verify_reset_token(token)
+    print(user)
+    if user is None:
+        return jsonify({'error':'Token expired'}),404
+    # token=data['token']
     hashed_pw = bcrypt.generate_password_hash(data['password']).decode('utf-8')
     user.password=hashed_pw
     db.session.commit()

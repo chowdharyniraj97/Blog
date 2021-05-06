@@ -15,7 +15,7 @@ Werkzeug==0.15
 WTForms==2.2.1
 Flask-Admin==1.5.6
 psycopg2==2.7.1
-Flask-Cors==3.0.8
+Flask-Cors==3.0.9
 Flask-JWT-Extended==3.24.1
 celery==4.4.2
 redis==3.5.2
